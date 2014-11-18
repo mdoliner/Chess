@@ -3,7 +3,6 @@ require './stepping_piece'
 
 class Piece
 
-  BOARD_SIZE = 8
   STRAIGHT_DELTAS = [[1,0], [0,1], [-1,0], [0,-1]]
   DIAGONAL_DELTAS = [[1,1], [-1,-1], [1, -1], [-1,1]]
 
