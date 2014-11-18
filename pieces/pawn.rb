@@ -9,21 +9,18 @@ class Pawn < SteppingPiece
   end
 
   def get_dir_delta
-    @pawn_straight_delta = (@color == :black ? [1,0] : [-1,0])
+    @pawn_straight_delta = (@color == :black ? [[1,0]] : [[-1,0]])
     @pawn_diagonal_delta = (@color == :black ? [[ 1, -1], [ 1,  1]] :
                                                [[-1,  1], [-1, -1]])
-    @pawn_first_delta = (@color == :black ? [2, 0] : [-2,0])
+    @pawn_first_delta = (@color == :black ? [[2, 0]] : [[-2,0]])
   end
 
   def moves
     moves = possible_moves(@pawn_straight_delta)
-    p moves
     moves += possible_moves(@pawn_diagonal_delta).select do |pos|
       !@board[pos].nil? && @board[pos].color != @color
     end
-    p moves
     moves += possible_moves(@pawn_first_delta) unless @moved
-    p moves
   end
 
 end

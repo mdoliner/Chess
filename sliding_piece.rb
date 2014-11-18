@@ -7,7 +7,7 @@ class SlidingPiece < Piece
     moves = []
     deltas.each do |delta|
       new_pos = self.pos.add_delta(delta)
-      until off_board(new_pos)
+      until off_board?(new_pos)
         unless self.board[new_pos].nil?
           moves << new_pos unless self.board[new_pos].color == self.color
           break

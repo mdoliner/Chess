@@ -5,6 +5,9 @@ Dir["./pieces/*.rb"].each {|file| require file }
 
 BOARD_SIZE = 8
 
+class InvalidMoveError < StandardError
+end
+
 class Board
 
   #piece => [x_positions]
@@ -40,6 +43,41 @@ class Board
   def []=(pos,value)
     y, x = pos[0], pos[1]
     @grid[y][x] = value
+  end
+
+  def all_moves(color)
+    moves = []
+    @grid.flatten.each do |piece|
+      next if piece.nil? || piece.color != color
+      moves += piece.moves
+    end
+    moves
+  end
+
+  def king_pos(color)
+    @grid.flatten.each do |piece|
+      return piece.pos if piece.is_a?(King) && piece.color == color
+    end
+  end
+
+  def in_check?(color)
+    all_moves(opp_color(color)).include?(king_pos(color))
+  end
+
+  def opp_color(color)
+    color == :black ? :white : :black
+  end
+
+  def move(start_pos, end_pos)
+    piece = self[start_pos]
+    if piece.nil? || piece.moves.include?(end_pos)
+      raise InvalidMoveError "Invalid Move Bro."
+    end
+    self[start_pos], self[end_pos] = nil, piece
+    piece.pos = end_pos
+  end
+
+  def inspect
   end
 
   private

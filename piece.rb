@@ -3,7 +3,8 @@ class Piece
   STRAIGHT_DELTAS = [[1,0], [0,1], [-1,0], [0,-1]]
   DIAGONAL_DELTAS = [[1,1], [-1,-1], [1, -1], [-1,1]]
 
-  attr_reader :pos, :board, :color
+  attr_reader :board, :color
+  attr_accessor :pos
 
   def initialize(board, pos, color)
     @board, @pos, @color = board, pos, color
@@ -14,7 +15,7 @@ class Piece
   end
 
   def off_board?(pos)
-    pos.all? { |num| num.between?(0,BOARD_SIZE - 1) }
+    !pos.all? { |num| num.between?(0,BOARD_SIZE - 1) }
   end
 
 end
