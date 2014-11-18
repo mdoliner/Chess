@@ -11,7 +11,7 @@ class SlidingPiece < Piece
       new_pos = self.pos.add_delta(delta)
       until off_board(new_pos)
         unless self.board[new_pos].nil?
-          moves << new_pos unless self.board[new_pos].alignment == self.alignment
+          moves << new_pos unless self.board[new_pos].color == self.color
           break
         else
           moves << new_pos

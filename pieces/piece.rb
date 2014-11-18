@@ -9,8 +9,8 @@ class Piece
 
   attr_reader :pos
 
-  def initialize(board, pos, alignment)
-    @board, @pos, @alignment = board, pos, alignment
+  def initialize(board, pos, color)
+    @board, @pos, @color = board, pos, color
   end
 
   def moves

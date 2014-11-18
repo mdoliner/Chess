@@ -9,7 +9,7 @@ class SteppingPiece < Piece
       new_pos = self.pos.add_delta(delta)
       next if off_board?(new_pos)
       if self.board[new_pos].nil? ||
-         self.board[new_pos].alignment != self.alignment
+        self.board[new_pos].color != self.color
         moves << new_pos
       end
     end
