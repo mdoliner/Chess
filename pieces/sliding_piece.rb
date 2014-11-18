@@ -1,8 +1,8 @@
 class SlidingPiece < Piece
 
-  def straight_moves
+  def possible_moves(deltas)
     moves = []
-    STRAIGHT_DELTAS.each do |delta|
+    deltas.each do |delta|
       new_pos = self.pos.add_delta(delta)
       until off_board(new_pos)
         unless self.board[new_pos].nil?
@@ -17,7 +17,12 @@ class SlidingPiece < Piece
     moves
   end
 
-  def diagonal_moves
-
+  def straight_moves
+    possible_moves(STRAIGHT_DELTAS)
   end
+
+  def diagonal_moves
+    possible_moves(DIAGONAL_DELTAS)
+  end
+  
 end
