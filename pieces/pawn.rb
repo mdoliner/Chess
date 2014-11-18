@@ -16,11 +16,17 @@ class Pawn < SteppingPiece
   end
 
   def moves
-    moves = possible_moves(@pawn_straight_delta)
+    moves = possible_moves(@pawn_straight_delta).select do |pos|
+      @board[pos].nil?
+    end
     moves += possible_moves(@pawn_diagonal_delta).select do |pos|
       !@board[pos].nil? && @board[pos].color != @color
     end
-    moves += possible_moves(@pawn_first_delta) unless @moved
+    unless @moved
+      moves += possible_moves(@pawn_first_delta).select do |pos|
+        @board[pos].nil?
+      end
+    end 
     moves
   end
 

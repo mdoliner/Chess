@@ -10,6 +10,8 @@ end
 
 class Board
 
+  attr_accessor :grid
+
   #piece => [x_positions]
   STARTUP_POSITIONS = {
     rook:   [0,7],
@@ -70,7 +72,7 @@ class Board
 
   def checkmate?(color)
     @grid.flatten.all? do |piece|
-      if piece.nil?
+      if piece.nil? || piece.color != color
         true
       else
         piece.valid_moves.empty?
@@ -97,14 +99,14 @@ class Board
 
   def render
     system('clear')
-    puts "   " + (0...BOARD_SIZE).to_a.join("   ")
-    puts " ╔══" + "═╦══"*(BOARD_SIZE - 1) + "═╗"
+    puts "    " + (0...BOARD_SIZE).to_a.join("   ")
+    puts "  ╔══" + "═╦══"*(BOARD_SIZE - 1) + "═╗"
     BOARD_SIZE.times do |row|
-      puts "#{row}║ " + @grid[row].join(" ║ ") + " ║"
+      puts "#{row} ║ " + @grid[row].join(" ║ ") + " ║"
       next if row == (BOARD_SIZE - 1)
-      puts " ╠══" + "═╬══"*(BOARD_SIZE - 1) + "═╣"
+      puts "  ╠══" + "═╬══"*(BOARD_SIZE - 1) + "═╣"
     end
-    puts " ╚══" + "═╩══"*(BOARD_SIZE - 1) + "═╝"
+    puts "  ╚══" + "═╩══"*(BOARD_SIZE - 1) + "═╝"
   end
 
   def dup
@@ -160,6 +162,6 @@ class Board
         raise InvalidMoveError.new "That space is full or invalid."
       end
     end
-  end0
+  end
 
 end
