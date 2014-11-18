@@ -1,6 +1,4 @@
-require './rook'
-require './bishop'
-require './queen'
+require './piece'
 
 
 class SlidingPiece < Piece

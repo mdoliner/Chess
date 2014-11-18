@@ -1,12 +1,9 @@
-require './sliding_piece'
-require './stepping_piece'
-
 class Piece
 
   STRAIGHT_DELTAS = [[1,0], [0,1], [-1,0], [0,-1]]
   DIAGONAL_DELTAS = [[1,1], [-1,-1], [1, -1], [-1,1]]
 
-  attr_reader :pos
+  attr_reader :pos, :board, :color
 
   def initialize(board, pos, color)
     @board, @pos, @color = board, pos, color
@@ -27,4 +24,4 @@ class Array
   def add_delta(delta)
     [self[0] + delta[0], self[1] + delta[1]]
   end
-endp
+end

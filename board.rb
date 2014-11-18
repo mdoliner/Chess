@@ -1,4 +1,9 @@
-require './piece'
+require_relative "piece"
+require_relative "sliding_piece"
+require_relative "stepping_piece"
+Dir["./pieces/*.rb"].each {|file| require file }
+
+BOARD_SIZE = 8
 
 class Board
 
@@ -21,8 +26,6 @@ class Board
     [:white, 6]
   ]
 
-  BOARD_SIZE = 8
-
   def initialize
     @grid = create_grid
     setup_pieces
@@ -35,21 +38,23 @@ class Board
   end
 
   def []=(pos,value)
-    y, x = pos
+    y, x = pos[0], pos[1]
     @grid[y][x] = value
   end
 
   private
   def create_grid
-    Array.new (BOARD_SIZE) { Array.new(BOARD_SIZE)}
+    Array.new(BOARD_SIZE) { Array.new(BOARD_SIZE)}
   end
 
   def setup_pieces
     STARTUP_COLOR_ROWS.each do |color, row|
-      STARTUP_POSITIONS.each do |piece, col|
-        piece_class = piece.to_s.camelize.constantize
-        pos = [row,col]
-        self[pos] = piece_class.new(self, pos, color)
+      STARTUP_POSITIONS.each do |piece, columns|
+        columns.each do |col|
+          piece_class = piece.to_s.capitalize
+          pos = [row,col]
+          self[pos] = (Object.const_get(piece_class)).new(self, pos, color)
+        end
       end
     end
     nil

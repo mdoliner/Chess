@@ -1,6 +1,4 @@
-require './king'
-require './knight'
-require './pawn'
+require './piece'
 
 class SteppingPiece < Piece
 
