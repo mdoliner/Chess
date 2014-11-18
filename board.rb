@@ -29,8 +29,8 @@ class Board
     [:white, 6]
   ]
 
-  def initialize
-    @grid = create_grid
+  def initialize (grid = create_grid)
+    @grid = grid
     setup_pieces
     setup_pawns
   end
@@ -65,7 +65,13 @@ class Board
   end
 
   def checkmate?(color)
-    @grid.flatten.all? { |piece| piece.valid_moves.empty? }
+    @grid.flatten.all? do |piece|
+      if piece.nil?
+        true
+      else
+        piece.valid_moves.empty?
+      end
+    end
   end
 
   def opp_color(color)
@@ -74,10 +80,10 @@ class Board
 
   def move(start_pos, end_pos)
     piece = self[start_pos]
-    if piece.nil?
-      raise InvalidMoveError.new "That space be empty."
+    if !piece.valid_moves.include?(end_pos) && in_check?(piece.color)
+      raise InvalidMoveError.new "You're in check."
     elsif !piece.valid_moves.include?(end_pos)
-      raise InvalidMoveError.new "That space be full."
+      raise InvalidMoveError.new "That space if fucking full as shit."
     end
     move!(start_pos, end_pos)
   end
@@ -89,8 +95,26 @@ class Board
     piece.pos = end_pos
   end
 
+  def render
+    system('clear')
+    puts "   " + (0...BOARD_SIZE).to_a.join("   ")
+    puts " ╔══" + "═╦══"*(BOARD_SIZE - 1) + "═╗"
+    BOARD_SIZE.times do |row|
+      puts "#{row}║ " + @grid[row].join(" ║ ") + " ║"
+      next if row == (BOARD_SIZE - 1)
+      puts " ╠══" + "═╬══"*(BOARD_SIZE - 1) + "═╣"
+    end
+    puts " ╚══" + "═╩══"*(BOARD_SIZE - 1) + "═╝"
+  end
+
   def dup
-    @grid.map { |row| row.map(&:dup) }
+    Board.new(@grid.map { |row| row.map(&:dup) })
+  end
+
+  def reset_ref
+    @grid.flatten.each do |piece|
+      piece.board = self unless piece.nil?
+    end
   end
 
   def inspect

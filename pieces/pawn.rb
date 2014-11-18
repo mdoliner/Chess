@@ -24,4 +24,8 @@ class Pawn < SteppingPiece
     moves
   end
 
+  def to_s
+    self.color == :white ? "♙" : "♟"
+  end
+
 end

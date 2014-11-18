@@ -3,8 +3,8 @@ class Piece
   STRAIGHT_DELTAS = [[1,0], [0,1], [-1,0], [0,-1]]
   DIAGONAL_DELTAS = [[1,1], [-1,-1], [1, -1], [-1,1]]
 
-  attr_reader :board, :color
-  attr_accessor :pos
+  attr_reader :color
+  attr_accessor :pos, :board
 
   def initialize(board, pos, color)
     @board, @pos, @color = board, pos, color
@@ -20,6 +20,7 @@ class Piece
 
   def move_into_check?(end_pos)
     dup_board = @board.dup
+    dup_board.reset_ref
     dup_board.move!(@pos,end_pos)
     dup_board.in_check?(@color)
   end
@@ -27,6 +28,7 @@ class Piece
   def valid_moves
     self.moves.reject { |move| move_into_check?(move) }
   end
+
 
 end
 

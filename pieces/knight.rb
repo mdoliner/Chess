@@ -13,4 +13,8 @@ class Knight < SteppingPiece
     possible_moves(KNIGHT_DELTAS)
   end
 
+  def to_s
+    self.color == :white ? "♘" : "♞"
+  end
+
 end

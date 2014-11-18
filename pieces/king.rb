@@ -5,4 +5,8 @@ class King < SteppingPiece
     possible_moves(DIAGONAL_DELTAS)
   end
 
+  def to_s
+    self.color == :white ? "♔" : "♚"
+  end
+
 end
