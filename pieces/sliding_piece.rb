@@ -1,3 +1,8 @@
+require './rook'
+require './bishop'
+require './queen'
+
+
 class SlidingPiece < Piece
 
   def possible_moves(deltas)
@@ -24,5 +29,5 @@ class SlidingPiece < Piece
   def diagonal_moves
     possible_moves(DIAGONAL_DELTAS)
   end
-  
+
 end

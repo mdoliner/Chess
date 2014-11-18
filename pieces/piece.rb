@@ -1,5 +1,5 @@
-require 'sliding_piece'
-require 'stepping_piece'
+require './sliding_piece'
+require './stepping_piece'
 
 class Piece
 
@@ -28,4 +28,4 @@ class Array
   def add_delta(delta)
     [self[0] + delta[0], self[1] + delta[1]]
   end
-end
+endp
