@@ -21,6 +21,7 @@ class Pawn < SteppingPiece
       !@board[pos].nil? && @board[pos].color != @color
     end
     moves += possible_moves(@pawn_first_delta) unless @moved
+    moves
   end
 
 end

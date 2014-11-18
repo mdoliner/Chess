@@ -64,17 +64,31 @@ class Board
     all_moves(opp_color(color)).include?(king_pos(color))
   end
 
+  def checkmate?(color)
+    @grid.flatten.all? { |piece| piece.valid_moves.empty? }
+  end
+
   def opp_color(color)
     color == :black ? :white : :black
   end
 
   def move(start_pos, end_pos)
     piece = self[start_pos]
-    if piece.nil? || piece.moves.include?(end_pos)
-      raise InvalidMoveError "Invalid Move Bro."
+    if piece.nil? || !piece.valid_moves.include?(end_pos)
+      raise InvalidMoveError.new "Invalid Move Bro."
     end
+    move!(start_pos, end_pos)
+  end
+
+  def move!(start_pos, end_pos)
+    piece = self[start_pos]
+    piece.moved = true if piece.is_a?(Pawn)
     self[start_pos], self[end_pos] = nil, piece
     piece.pos = end_pos
+  end
+
+  def dup
+    @grid.map { |row| row.map(&:dup) }
   end
 
   def inspect

@@ -18,6 +18,16 @@ class Piece
     !pos.all? { |num| num.between?(0,BOARD_SIZE - 1) }
   end
 
+  def move_into_check?(end_pos)
+    dup_board = @board.dup
+    dup_board.move!(@pos,end_pos)
+    dup_board.in_check?(@color)
+  end
+
+  def valid_moves
+    self.moves.reject { |move| move_into_check?(move) }
+  end
+
 end
 
 
