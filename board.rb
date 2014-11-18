@@ -29,10 +29,14 @@ class Board
     [:white, 6]
   ]
 
-  def initialize (grid = create_grid)
-    @grid = grid
-    setup_pieces
-    setup_pawns
+  def initialize (grid = nil)
+    if grid.nil?
+      @grid = create_grid
+      setup_pieces
+      setup_pawns
+    else
+      @grid = grid
+    end
   end
 
   def [] (pos)
@@ -80,11 +84,7 @@ class Board
 
   def move(start_pos, end_pos)
     piece = self[start_pos]
-    if !piece.valid_moves.include?(end_pos) && in_check?(piece.color)
-      raise InvalidMoveError.new "You're in check."
-    elsif !piece.valid_moves.include?(end_pos)
-      raise InvalidMoveError.new "That space if fucking full as shit."
-    end
+    check_for_invalid_moves(piece, end_pos)
     move!(start_pos, end_pos)
   end
 
@@ -147,5 +147,19 @@ class Board
     end
     nil
   end
+
+  def check_for_invalid_moves(piece, end_pos)
+    if !piece.valid_moves.include?(end_pos)
+      if in_check?(piece.color) && piece.moves.include?(end_pos)
+        raise InvalidMoveError.new "That move will keep you in check."
+      elsif in_check?(piece.color)
+        raise InvalidMoveError.new "You're currently in check."
+      elsif piece.moves.include?(end_pos)
+        raise InvalidMoveError.new "That move will put you into check."
+      else
+        raise InvalidMoveError.new "That space is full or invalid."
+      end
+    end
+  end0
 
 end
