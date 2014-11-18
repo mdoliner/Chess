@@ -74,8 +74,10 @@ class Board
 
   def move(start_pos, end_pos)
     piece = self[start_pos]
-    if piece.nil? || !piece.valid_moves.include?(end_pos)
-      raise InvalidMoveError.new "Invalid Move Bro."
+    if piece.nil?
+      raise InvalidMoveError.new "That space be empty."
+    elsif !piece.valid_moves.include?(end_pos)
+      raise InvalidMoveError.new "That space be full."
     end
     move!(start_pos, end_pos)
   end
