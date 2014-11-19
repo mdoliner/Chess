@@ -46,6 +46,9 @@ class Game
         raise InvalidMoveError.new "Wrong Color"
       end
       @board.move(move_from, move_to)
+      if pawn_promotion(current_player.color)
+        current_player.get_promotion
+      end
     rescue InvalidMoveError => e
       puts "Invalid move: #{e.message}"
       sleep(2)

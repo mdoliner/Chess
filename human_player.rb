@@ -38,6 +38,11 @@ class HumanPlayer
     [row, col]
   end
 
+  def get_promotion
+    puts "How did you fucking pull that off? What would you like your pawn to become?"
+    
+  end
+
   def to_s
     @color.to_s.capitalize
   end

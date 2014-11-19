@@ -13,7 +13,17 @@ class King < SteppingPiece
   def special_moves
     castle_left_move + castle_right_move
   end
-  
+
+  def perform_special_move(end_pos)
+    row = end_pos[0]
+    if end_pos == [row, 2]
+      @board.move!([row,0],[row,3])
+    elsif end_pos == [row, 6]
+      @board.move!([row,7],[row,5])
+    end
+    nil
+  end
+
   private
 
   def castle_left?

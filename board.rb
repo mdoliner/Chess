@@ -31,6 +31,11 @@ class Board
     [:white, 1]
   ]
 
+  PAWN_PROMOTION_ROW = {
+    black: 0,
+    white: 7
+  }
+
   def initialize(grid = nil)
     if grid.nil?
       @grid = create_grid
@@ -69,6 +74,15 @@ class Board
     all_moves(opp_color(color)).include?(find_king(color).pos)
   end
 
+  def pawn_promotion?(color)
+    all_pieces_of_color(color).each do |piece|
+      if piece.is_a?(Pawn) &&
+        piece.pos.first == ROW_PROMOTION_ROW[opp_color(color)]
+        return piece
+      end
+    end
+  end
+
   def checkmate?(color)
     all_pieces_of_color(color).all? do |piece|
       piece.valid_moves.empty?
@@ -82,6 +96,9 @@ class Board
   def move(start_pos, end_pos)
     piece = self[start_pos]
     check_for_invalid_moves(piece, end_pos)
+    if piece.special_moves.include?(end_pos)
+      piece.perform_special_move(end_pos)
+    end
     move!(start_pos, end_pos)
   end
 
@@ -164,7 +181,7 @@ class Board
       elsif piece.moves.include?(end_pos)
         raise InvalidMoveError.new "That move will put you into check."
       else
-        raise InvalidMoveError.new "That space is full or invalid."
+        raise InvalidMoveError.new "That move is invalid. (or the space is full.)"
       end
     end
   end

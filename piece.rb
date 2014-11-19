@@ -33,6 +33,10 @@ class Piece
     @moved
   end
 
+  def special_moves
+    []
+  end
+
 end
 
 
