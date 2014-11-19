@@ -99,10 +99,10 @@ class Board
 
   def render
     system('clear')
-    puts "    " + (0...BOARD_SIZE).to_a.join("   ")
+    puts "    " + ('a'..'h').to_a.join("   ")
     puts "  ╔══" + "═╦══"*(BOARD_SIZE - 1) + "═╗"
     BOARD_SIZE.times do |row|
-      puts "#{row} ║ " + @grid[row].join(" ║ ") + " ║"
+      puts "#{row + 1} ║ " + @grid[row].join(" ║ ") + " ║"
       next if row == (BOARD_SIZE - 1)
       puts "  ╠══" + "═╬══"*(BOARD_SIZE - 1) + "═╣"
     end
