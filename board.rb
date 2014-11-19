@@ -53,7 +53,7 @@ class Board
 
   def all_moves(color)
     moves = []
-    @grid.flatten.each do |piece|
+    all_pieces.each do |piece|
       next if piece.nil? || piece.color != color
       moves += piece.moves
     end
@@ -61,7 +61,7 @@ class Board
   end
 
   def king_pos(color)
-    @grid.flatten.each do |piece|
+    all_pieces.each do |piece|
       return piece.pos if piece.is_a?(King) && piece.color == color
     end
   end
@@ -71,7 +71,7 @@ class Board
   end
 
   def checkmate?(color)
-    @grid.flatten.all? do |piece|
+    all_pieces.all? do |piece|
       if piece.nil? || piece.color != color
         true
       else
@@ -114,7 +114,7 @@ class Board
   end
 
   def reset_ref
-    @grid.flatten.each do |piece|
+    all_pieces.each do |piece|
       piece.board = self unless piece.nil?
     end
   end
@@ -148,6 +148,10 @@ class Board
       end
     end
     nil
+  end
+
+  def all_pieces
+    @grid.flatten
   end
 
   def check_for_invalid_moves(piece, end_pos)
