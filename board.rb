@@ -93,7 +93,7 @@ class Board
   def move!(start_pos, end_pos)
     piece = self[start_pos]
     piece.moved = true if piece.is_a?(Pawn)
-    self[start_pos], self[end_pos] = nil, piece
+    self[start_pos], self[end_pos] = EmptySpace, piece
     piece.pos = end_pos
   end
 
@@ -124,7 +124,7 @@ class Board
 
   private
   def create_grid
-    Array.new(BOARD_SIZE) { Array.new(BOARD_SIZE)}
+    Array.new(BOARD_SIZE) { Array.new(BOARD_SIZE) {EmptySpace}}
   end
 
   def setup_pieces

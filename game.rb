@@ -6,7 +6,7 @@ class Game
 
   def self.load_game
     load_file = YAML.load_file('chess_game.sav')
-    self.delete_save
+    Game.delete_save
     load_file
   end
 
@@ -26,8 +26,9 @@ class Game
       play_turn
       save_game
     end
+    display_board
     victory_message
-    delete_save
+    Game.delete_save
   end
 
   private
@@ -74,16 +75,6 @@ class Game
     File.write("chess_game.sav", YAML.dump(self))
   end
 
-end
-
-class NilClass
-  def to_s
-    " "
-  end
-
-  def dup
-    nil
-  end
 end
 
 if __FILE__ == $PROGRAM_NAME
