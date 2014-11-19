@@ -36,6 +36,8 @@ class Board
     white: 7
   }
 
+  PROMOTION_PIECE_TYPES = [Bishop, Knight, Queen, Rook]
+
   def initialize(grid = nil)
     if grid.nil?
       @grid = create_grid
@@ -74,13 +76,14 @@ class Board
     all_moves(opp_color(color)).include?(find_king(color).pos)
   end
 
-  def pawn_promotion?(color)
+  def promoted_pawn(color)
     all_pieces_of_color(color).each do |piece|
       if piece.is_a?(Pawn) &&
-        piece.pos.first == ROW_PROMOTION_ROW[opp_color(color)]
+        piece.pos.first == PAWN_PROMOTION_ROW[color]
         return piece
       end
     end
+    nil
   end
 
   def checkmate?(color)

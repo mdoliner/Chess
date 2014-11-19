@@ -29,7 +29,7 @@ class King < SteppingPiece
   def castle_left?
     row = @pos[0]
     rook = @board[[row,0]]
-
+    return false if rook.nil?
     !self.has_moved? &&
     !rook.has_moved? &&
     @board[[row,1]].nil? &&
@@ -49,7 +49,7 @@ class King < SteppingPiece
   def castle_right?
     row = @pos[0]
     rook = @board[[row,7]]
-
+    return false if rook.nil?
     !self.has_moved? &&
     !rook.has_moved? &&
     @board[[row,5]].nil? &&

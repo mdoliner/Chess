@@ -33,22 +33,20 @@ class Game
   private
 
   def play_turn
-    current_player = @players[@turn % 2]
+    @current_player = @players[@turn % 2]
 
     begin
       display_board
-      puts "#{current_player} moves next."
+      puts "#{@current_player} moves next."
 
-      move_from, move_to = current_player.get_move
+      move_from, move_to = @current_player.get_move
       if @board[move_from].nil?
         raise InvalidMoveError.new "That space is empty."
-      elsif @board[move_from].color != current_player.color
+      elsif @board[move_from].color != @current_player.color
         raise InvalidMoveError.new "Wrong Color"
       end
       @board.move(move_from, move_to)
-      if pawn_promotion(current_player.color)
-        current_player.get_promotion
-      end
+      promote_pawn(move_to)
     rescue InvalidMoveError => e
       puts "Invalid move: #{e.message}"
       sleep(2)
@@ -56,6 +54,15 @@ class Game
     end
 
     @turn += 1
+  end
+
+  def promote_pawn(pos)
+    color = @current_player.color
+    promoted_pawn = @board.promoted_pawn(color)
+    if promoted_pawn
+      new_piece = @current_player.get_promotion.new(@board, pos, color)
+      @board[pos] = new_piece
+    end
   end
 
   def victory_message

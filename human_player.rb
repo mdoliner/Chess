@@ -39,8 +39,17 @@ class HumanPlayer
   end
 
   def get_promotion
-    puts "How did you fucking pull that off? What would you like your pawn to become?"
-    
+    begin
+      puts "What would you like your pawn to become?"
+      piece_class = Object.const_get(gets.chomp.capitalize)
+      unless Board::PROMOTION_PIECE_TYPES.include?(piece_class)
+        raise NameError
+      end
+    rescue NameError => e
+      puts "Not a possible promotion."
+      retry
+    end
+    piece_class
   end
 
   def to_s
