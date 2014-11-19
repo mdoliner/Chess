@@ -76,7 +76,9 @@ class Game
   end
 
   def game_over?
-    @board.checkmate?(:white) || @board.checkmate?(:black)
+    @board.checkmate?(:white) ||
+    @board.checkmate?(:black) ||
+    @board.stalemate?
   end
 
   def display_board

@@ -136,6 +136,19 @@ class Board
     self
   end
 
+  def stalemate?
+    pieces = numbers_of_pieces
+    unless pieces[Rook] == 0 &&
+      pieces[Pawn] == 0 &&
+      pieces[Queen] == 0
+      return false
+    end
+    (pieces[Bishop] == 1 && pieces[Knight] == 0) ||
+    (pieces[Knight] == 0 && pieces[Bishop] == 1) ||
+    (pieces[Bishop] == 1 && pieces[Knight] == 0)
+  end
+
+
   def inspect
   end
 
@@ -173,6 +186,15 @@ class Board
 
   def all_pieces_of_color(color)
     all_pieces.select { |piece| piece.color == color }
+  end
+
+  def numbers_of_pieces
+    piece_counts = Hash.new(0)
+    all_pieces.each do |piece|
+      next if piece.nil?
+      piece_counts[piece.class] += 1
+    end
+    piece_counts
   end
 
   def check_for_invalid_moves(piece, end_pos)
