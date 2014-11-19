@@ -5,40 +5,62 @@ require 'yaml'
 class Game
 
   def self.load_game
-    YAML.load_file('chess_game.sav')
+    load_file = YAML.load_file('chess_game.sav')
+    self.delete_save
+    load_file
+  end
+
+
+  def self.delete_save
+    File.delete("chess_game.sav")
   end
 
   def initialize(board = Board.new)
     @board = board
-    @players = [HumanPlayer.new(:white), HumanPlayer.new(:black)]
+    @players = [HumanPlayer.new(:black), HumanPlayer.new(:white)]
   end
 
   def run_game
     @turn = 1
     until game_over?
-      current_player = @players[@turn % 2]
-      begin
-        display_board
-        puts "#{current_player.color.to_s.capitalize} moves next."
-        move_from, move_to = current_player.get_move
-        if @board[move_from].nil?
-          raise InvalidMoveError.new "That space be empty."
-        elsif @board[move_from].color != current_player.color
-          raise InvalidMoveError.new "Wrong Color"
-        end
-        @board.move(move_from, move_to)
-      rescue InvalidMoveError => e
-        puts "Yo, invalid move: #{e.message}"
-        sleep(2)
-        retry
-      end
-      @turn += 1
+      play_turn
       save_game
     end
+    victory_message
+    delete_save
   end
 
-
   private
+
+  def play_turn
+    current_player = @players[@turn % 2]
+    begin
+      display_board
+      puts "#{current_player.color.to_s.capitalize} moves next."
+      move_from, move_to = current_player.get_move
+      if @board[move_from].nil?
+        raise InvalidMoveError.new "That space be empty."
+      elsif @board[move_from].color != current_player.color
+        raise InvalidMoveError.new "Wrong Color"
+      end
+      @board.move(move_from, move_to)
+    rescue InvalidMoveError => e
+      puts "Invalid move: #{e.message}"
+      sleep(2)
+      retry
+    end
+    @turn += 1
+  end
+
+  def victory_message
+    if @board.checkmate?(:white)
+      puts "Congrats, black wins in #{@turn} turns!"
+    elsif @board.checkmate?(:black)
+      puts "Congrats, white wins in #{@turn} turns!"
+    else
+      puts "Too bad, stalemate. Nobody wins."
+    end
+  end
 
   def game_over?
     @board.checkmate?(:white) || @board.checkmate?(:black)
