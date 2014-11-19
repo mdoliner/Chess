@@ -10,7 +10,6 @@ class Game
     load_file
   end
 
-
   def self.delete_save
     File.delete("chess_game.sav")
   end
@@ -18,10 +17,10 @@ class Game
   def initialize(board = Board.new)
     @board = board
     @players = [HumanPlayer.new(:black), HumanPlayer.new(:white)]
+    @turn = 1
   end
 
   def run_game
-    @turn = 1
     until game_over?
       play_turn
       save_game
@@ -35,12 +34,14 @@ class Game
 
   def play_turn
     current_player = @players[@turn % 2]
+
     begin
       display_board
-      puts "#{current_player.color.to_s.capitalize} moves next."
+      puts "#{current_player} moves next."
+
       move_from, move_to = current_player.get_move
       if @board[move_from].nil?
-        raise InvalidMoveError.new "That space be empty."
+        raise InvalidMoveError.new "That space is empty."
       elsif @board[move_from].color != current_player.color
         raise InvalidMoveError.new "Wrong Color"
       end
@@ -50,6 +51,7 @@ class Game
       sleep(2)
       retry
     end
+
     @turn += 1
   end
 

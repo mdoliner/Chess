@@ -4,10 +4,11 @@ class Piece
   DIAGONAL_DELTAS = [[1,1], [-1,-1], [1, -1], [-1,1]]
 
   attr_reader :color
-  attr_accessor :pos, :board
+  attr_accessor :pos, :board, :moved
 
   def initialize(board, pos, color)
     @board, @pos, @color = board, pos, color
+    @moved = false
   end
 
   def moves
@@ -15,12 +16,11 @@ class Piece
   end
 
   def off_board?(pos)
-    !pos.all? { |num| num.between?(0,BOARD_SIZE - 1) }
+    !pos.all? { |num| num.between?(0, Board::BOARD_SIZE - 1) }
   end
 
   def move_into_check?(end_pos)
     dup_board = @board.dup
-    dup_board.reset_ref
     dup_board.move!(@pos,end_pos)
     dup_board.in_check?(@color)
   end
@@ -29,6 +29,9 @@ class Piece
     self.moves.reject { |move| move_into_check?(move) }
   end
 
+  def has_moved?
+    @moved
+  end
 
 end
 

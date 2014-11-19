@@ -9,6 +9,10 @@ class EmptySpace < NilClass
   end
 
   def self.dup
+    EmptySpace
+  end
+
+  def self.color
     nil
   end
 

@@ -1,6 +1,5 @@
 require './piece'
 
-
 class SlidingPiece < Piece
 
   def possible_moves(deltas)

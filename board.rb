@@ -3,12 +3,12 @@ require_relative "sliding_piece"
 require_relative "stepping_piece"
 Dir["./pieces/*.rb"].each {|file| require file }
 
-BOARD_SIZE = 8
-
 class InvalidMoveError < StandardError
 end
 
 class Board
+
+  BOARD_SIZE = 8
 
   attr_accessor :grid
 
@@ -31,7 +31,7 @@ class Board
     [:white, 6]
   ]
 
-  def initialize (grid = nil)
+  def initialize(grid = nil)
     if grid.nil?
       @grid = create_grid
       setup_pieces
@@ -41,7 +41,7 @@ class Board
     end
   end
 
-  def [] (pos)
+  def [](pos)
     y, x = pos
     @grid[y][x]
   end
@@ -53,30 +53,25 @@ class Board
 
   def all_moves(color)
     moves = []
-    all_pieces.each do |piece|
-      next if piece.nil? || piece.color != color
+    all_pieces_of_color(color).each do |piece|
       moves += piece.moves
     end
     moves
   end
 
-  def king_pos(color)
-    all_pieces.each do |piece|
-      return piece.pos if piece.is_a?(King) && piece.color == color
+  def find_king(color)
+    all_pieces_of_color(color).each do |piece|
+      return piece if piece.is_a?(King)
     end
   end
 
   def in_check?(color)
-    all_moves(opp_color(color)).include?(king_pos(color))
+    all_moves(opp_color(color)).include?(find_king(color).pos)
   end
 
   def checkmate?(color)
-    all_pieces.all? do |piece|
-      if piece.nil? || piece.color != color
-        true
-      else
-        piece.valid_moves.empty?
-      end
+    all_pieces_of_color(color).all? do |piece|
+      piece.valid_moves.empty?
     end
   end
 
@@ -92,7 +87,7 @@ class Board
 
   def move!(start_pos, end_pos)
     piece = self[start_pos]
-    piece.moved = true if piece.is_a?(Pawn)
+    piece.moved = true
     self[start_pos], self[end_pos] = EmptySpace, piece
     piece.pos = end_pos
   end
@@ -110,13 +105,15 @@ class Board
   end
 
   def dup
-    Board.new(@grid.map { |row| row.map(&:dup) })
+    dup_board = Board.new(@grid.map { |row| row.map(&:dup) })
+    dup_board.reset_ref
   end
 
   def reset_ref
     all_pieces.each do |piece|
       piece.board = self unless piece.nil?
     end
+    self
   end
 
   def inspect
@@ -152,6 +149,10 @@ class Board
 
   def all_pieces
     @grid.flatten
+  end
+
+  def all_pieces_of_color(color)
+    all_pieces.select { |piece| piece.color == color }
   end
 
   def check_for_invalid_moves(piece, end_pos)

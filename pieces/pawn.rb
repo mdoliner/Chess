@@ -1,12 +1,5 @@
 class Pawn < SteppingPiece
 
-  attr_accessor :moved
-
-  def initialize(board,pos,color)
-    super(board,pos,color)
-    @moved = false
-  end
-
   def moves
     straight_moves + diagonal_moves
   end
@@ -16,10 +9,6 @@ class Pawn < SteppingPiece
   end
 
   private
-
-  def has_moved?
-    @moved
-  end
 
   def get_straight_delta
     delta = (@color == :black ? [[1,0]] : [[-1,0]])

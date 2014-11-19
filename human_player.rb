@@ -38,4 +38,8 @@ class HumanPlayer
     [row, col]
   end
 
+  def to_s
+    @color.to_s.capitalize
+  end
+
 end

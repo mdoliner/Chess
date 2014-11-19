@@ -9,4 +9,12 @@ class King < SteppingPiece
     self.color == :white ? "♔" : "♚"
   end
 
+  def special_move
+
+  end
+
+  def castle?
+    !has_moved?
+  end
+
 end
