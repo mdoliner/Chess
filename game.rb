@@ -22,7 +22,6 @@ class Game
   end
 
   def run_game
-    puts "Start run game"
     until game_over?
       @board.store_state
       play_turn
