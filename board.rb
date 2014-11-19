@@ -11,6 +11,7 @@ class Board
   BOARD_SIZE = 8
 
   attr_accessor :grid
+  attr_reader :previous_states
 
   #piece => [x_positions]
   STARTUP_POSITIONS = {
@@ -46,6 +47,7 @@ class Board
     else
       @grid = grid
     end
+    @previous_states = []
   end
 
   def [](pos)
@@ -88,6 +90,7 @@ class Board
 
   def checkmate?(color)
     all_pieces_of_color(color).all? do |piece|
+      p piece
       piece.valid_moves.empty?
     end
   end
@@ -117,11 +120,12 @@ class Board
     puts "    " + ('a'..'h').to_a.join("   ")
     puts "  ╔══" + "═╦══"*(BOARD_SIZE - 1) + "═╗"
     BOARD_SIZE.times do |row|
-      puts "#{row + 1} ║ " + @grid[row].join(" ║ ") + " ║"
+      puts "#{row + 1} ║ " + @grid[row].join(" ║ ") + " ║▒"
       next if row == (BOARD_SIZE - 1)
-      puts "  ╠══" + "═╬══"*(BOARD_SIZE - 1) + "═╣"
+      puts "  ╠══" + "═╬══"*(BOARD_SIZE - 1) + "═╣▒"
     end
-    puts "  ╚══" + "═╩══"*(BOARD_SIZE - 1) + "═╝"
+    puts "  ╚══" + "═╩══"*(BOARD_SIZE - 1) + "═╝▒"
+    puts "   ▒▒" + "▒▒▒▒"*(BOARD_SIZE - 1) + "▒▒▒"
   end
 
   def dup
@@ -148,6 +152,10 @@ class Board
     (pieces[Bishop] == 1 && pieces[Knight] == 0)
   end
 
+  def store_state
+    state = self.dup
+    @previous_states << state
+  end
 
   def inspect
   end

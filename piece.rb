@@ -44,4 +44,8 @@ class Array
   def add_delta(delta)
     [self[0] + delta[0], self[1] + delta[1]]
   end
+
+  def remove_delta(delta)
+    [self[0] - delta[0], self[1] - delta[1]]
+  end
 end

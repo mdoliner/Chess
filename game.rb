@@ -16,12 +16,15 @@ class Game
 
   def initialize(board = Board.new)
     @board = board
+    @board.store_state
     @players = [HumanPlayer.new(:black), HumanPlayer.new(:white)]
     @turn = 1
   end
 
   def run_game
+    puts "Start run game"
     until game_over?
+      @board.store_state
       play_turn
       save_game
     end
