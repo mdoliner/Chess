@@ -1,7 +1,12 @@
 require_relative 'board'
 require_relative 'human_player'
+require 'yaml'
 
 class Game
+
+  def self.load_game
+    YAML.load_file('chess_game.sav')
+  end
 
   def initialize(board = Board.new)
     @board = board
@@ -9,9 +14,9 @@ class Game
   end
 
   def run_game
-    turn = 1
+    @turn = 1
     until game_over?
-      current_player = @players[turn % 2]
+      current_player = @players[@turn % 2]
       begin
         display_board
         puts "#{current_player.color.to_s.capitalize} moves next."
@@ -27,9 +32,11 @@ class Game
         sleep(2)
         retry
       end
-      turn += 1
+      @turn += 1
+      save_game
     end
   end
+
 
   private
 
@@ -39,6 +46,10 @@ class Game
 
   def display_board
     @board.render
+  end
+
+  def save_game
+    File.write("chess_game.sav", YAML.dump(self))
   end
 
 end
@@ -54,5 +65,14 @@ class NilClass
 end
 
 if __FILE__ == $PROGRAM_NAME
-  Game.new.run_game
+  if File.exist?('chess_game.sav')
+    puts "Would you like to load your previous game?(y/n)"
+    if gets.chomp.downcase == "y"
+      Game.load_game.run_game
+    else
+      Game.new.run_game
+    end
+  else
+    Game.new.run_game
+  end
 end
