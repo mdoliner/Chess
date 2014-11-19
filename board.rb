@@ -17,18 +17,18 @@ class Board
     rook:   [0,7],
     knight: [1,6],
     bishop: [2,5],
-    king:   [3],
-    queen:  [4],
+    king:   [4],
+    queen:  [3],
   }
 
   STARTUP_COLOR_ROWS = [
-    [:black, 0],
-    [:white, 7]
+    [:black, 7],
+    [:white, 0]
   ]
 
   STARTUP_PAWN_COLOR_ROWS = [
-    [:black, 1],
-    [:white, 6]
+    [:black, 6],
+    [:white, 1]
   ]
 
   def initialize(grid = nil)

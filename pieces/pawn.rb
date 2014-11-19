@@ -11,8 +11,10 @@ class Pawn < SteppingPiece
   private
 
   def get_straight_delta
-    delta = (@color == :black ? [[1,0]] : [[-1,0]])
-    delta += (@color == :black ? [[2, 0]] : [[-2,0]]) unless has_moved?
+    delta = (@color == :black ? [[-1,0]] : [[1,0]])
+    unless has_moved? || piece_in_front?(delta.first)
+      delta += (@color == :black ? [[-2, 0]] : [[2,0]])
+    end
     delta
   end
 
@@ -34,6 +36,10 @@ class Pawn < SteppingPiece
     possible_moves(get_diagonal_delta).select do |pos|
       !@board[pos].nil? && @board[pos].color != @color
     end
+  end
+
+  def piece_in_front?(delta)
+    !@board[@pos.add_delta(delta)].nil?
   end
 
 end
