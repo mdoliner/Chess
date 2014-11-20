@@ -1,9 +1,7 @@
--cemetary
 -save, exit, draw, (undo_move?) commands for players.
 --(change delete_save to delete_auto_save)
 
 -review turns
--check and MAYBE(definitely) put into a player class
 -optimize game_over?
 
 -readme
