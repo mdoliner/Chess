@@ -28,6 +28,7 @@ class Pawn < SteppingPiece
 
   def perform_special_move(end_pos)
     remove_pos = end_pos.remove_delta(forward_delta)
+    @board.graveyard << @board[remove_pos]
     @board[remove_pos] = EmptySpace
   end
 

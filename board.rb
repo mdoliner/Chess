@@ -10,7 +10,7 @@ class Board
 
   BOARD_SIZE = 8
 
-  attr_accessor :grid
+  attr_accessor :grid, :graveyard
   attr_reader :previous_states
 
   #piece => [x_positions]
@@ -48,6 +48,7 @@ class Board
       @grid = grid
     end
     @previous_states = []
+    @graveyard = []
   end
 
   def [](pos)
@@ -110,6 +111,7 @@ class Board
   def move!(start_pos, end_pos)
     piece = self[start_pos]
     piece.moved = true
+    @graveyard << self[end_pos] unless self[end_pos].nil?
     self[start_pos], self[end_pos] = EmptySpace, piece
     piece.pos = end_pos
   end
@@ -125,6 +127,7 @@ class Board
     end
     puts "  ╚══" + "═╩══"*(BOARD_SIZE - 1) + "═╝▒"
     puts "   ▒▒" + "▒▒▒▒"*(BOARD_SIZE - 1) + "▒▒▒"
+    puts "Graveyard: " + @graveyard.join(" ")
   end
 
   def dup
