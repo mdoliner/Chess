@@ -19,7 +19,10 @@ class HumanPlayer
 
   def get_move
     print "Move from: "
-    start_pos = convert(gets.chomp.split(""))
+    first_input = gets.chomp
+    abort if first_input.downcase == "exit"
+    return :save if first_input.downcase == "save"
+    start_pos = convert(first_input.split(""))
 
     print "Move to: "
     end_pos = convert(gets.chomp.split(""))

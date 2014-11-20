@@ -4,14 +4,14 @@ require 'yaml'
 
 class Game
 
-  def self.load_game
-    load_file = YAML.load_file('chess_game.sav')
-    Game.delete_save
+  def self.load_game(filename)
+    load_file = YAML.load_file(filename)
+    Game.delete_save(filename) unless filename == "./saves/chess_game_auto_save.sav"
     load_file
   end
-
-  def self.delete_save
-    File.delete("chess_game.sav")
+  
+  def self.delete_save(filename)
+      File.delete(filename)
   end
 
   def initialize(board = Board.new)
@@ -25,11 +25,11 @@ class Game
     until game_over?
       @board.store_state
       play_turn
-      save_game
+      auto_save_game
     end
     display_board
     victory_message
-    Game.delete_save
+    Game.delete_auto_save
   end
 
   private
@@ -40,8 +40,9 @@ class Game
     begin
       display_board
       puts "#{@current_player} moves next."
-
-      move_from, move_to = @current_player.get_move
+      current_move = @current_player.get_move
+      save_game if current_move == :save
+      move_from, move_to = current_move
       if @board[move_from].nil?
         raise InvalidMoveError.new "That space is empty."
       elsif @board[move_from].color != @current_player.color
@@ -87,17 +88,26 @@ class Game
     @board.render
   end
 
+  def auto_save_game
+    File.write("saves/chess_game_auto_save.sav", YAML.dump(self))
+  end
+  
   def save_game
-    File.write("chess_game.sav", YAML.dump(self))
+    puts "What is the name of your saved game?"
+    filename = "./saves/" + gets.chomp + ".sav"
+    File.write(filename, YAML.dump(self))
+    abort
   end
 
 end
 
 if __FILE__ == $PROGRAM_NAME
-  if File.exist?('chess_game.sav')
+  if File.exist?('./saves/chess_game_auto_save.sav')
     puts "Would you like to load your previous game?(y/n)"
     if gets.chomp.downcase == "y"
-      Game.load_game.run_game
+      puts "Which file number would you like to load?"
+      Dir["./saves/*.sav"].each.with_index { |file, index| puts "#{index}) #{file}" }
+      Game.load_game(Dir["./saves/*.sav"][gets.chomp.to_i]).run_game
     else
       Game.new.run_game
     end
