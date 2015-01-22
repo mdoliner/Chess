@@ -9,7 +9,7 @@ class Game
     Game.delete_save(filename) unless filename == "./saves/chess_game_auto_save.sav"
     load_file
   end
-  
+
   def self.delete_save(filename)
       File.delete(filename)
   end
@@ -91,7 +91,7 @@ class Game
   def auto_save_game
     File.write("saves/chess_game_auto_save.sav", YAML.dump(self))
   end
-  
+
   def save_game
     puts "What is the name of your saved game?"
     filename = "./saves/" + gets.chomp + ".sav"
@@ -102,6 +102,7 @@ class Game
 end
 
 if __FILE__ == $PROGRAM_NAME
+  system('clear')
   if File.exist?('./saves/chess_game_auto_save.sav')
     puts "Would you like to load your previous game?(y/n)"
     if gets.chomp.downcase == "y"
